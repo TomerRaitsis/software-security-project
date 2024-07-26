@@ -1,0 +1,24 @@
+GET http://localhost:3001/api/userBoard
+x-access-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YTNjNjY1ODRlMmNkNDNmODgzNWMxMiIsImlhdCI6MTcyMjAwOTI4OCwiZXhwIjoxNzIyMDk1Njg4fQ.QIYIcVL_yYR1Ly6anxuWYAkBHbvGQf8so0uARrvW_FI
+
+
+###
+
+POST http://localhost:3001/api/signUp
+Content-Type: application/json
+
+{
+  "email": "USEuser1@goo.com",
+  "password": "USERuser1"
+}
+
+### 
+
+POST http://localhost:3001/api/signIn
+Content-Type: application/json
+
+{
+  "email": "USEuser1@goo.com",
+  "password": "USERuser1"
+}
+

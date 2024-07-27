@@ -2,7 +2,7 @@ import { UserModel } from "../models/dbShema.js";
 
 // simulating admin board
 const adminBoard = (req, res) => {
-  res.send("Any content sent from server");
+  res.send("welcome to the Admin Board");
 };
 
 // getAllRoles
@@ -46,7 +46,7 @@ const addSupervisor = async (req, res) => {
     let user = await UserModel.findOne({ email: userToSupervisor });
     console.log(user);
     if (user && !user.roles.includes("ROLE_SUPERVISOR")) {
-      user.roles.push("ROLE_SUPERVISOR");
+      user.roles = ["ROLE_SUPERVISOR"];
       let saveUser = await user.save();
       console.log(saveUser);
       let allUsers = await UserModel.find();
@@ -66,7 +66,7 @@ const removeSupervisor = async (req, res) => {
     let user = await UserModel.findOne({ email: supervisorToUser });
     console.log(user);
     if (user && user.roles.includes("ROLE_SUPERVISOR")) {
-      user.roles.splice(user.roles.indexOf("ROLE_SUPERVISOR"), 1);
+      user.roles = ["ROLE_USER"];
       let saveUser = await user.save();
       console.log(saveUser);
       let users = await UserModel.find();

@@ -10,10 +10,10 @@ const homeBoard = (req, res) => {
 // update profile
 const updateProfile = async (req, res) => {
   let userNewEmail = req.body.email;
-  console.log("req.userId:", req.userID);
+  console.log("req.userId:", userNewEmail);
   try {
     if (userNewEmail) {
-      let user = await UserModel.findById(req.userID);
+      let user = await UserModel.findById(req.query.userID);
       console.log(user);
       user.email = userNewEmail;
       let saveUser = await user.save();

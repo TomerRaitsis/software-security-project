@@ -1,0 +1,8 @@
+::ffff:127.0.0.1 - - [27/Jul/2024:15:00:21 +0000] "POST /api/signUp HTTP/1.1" 200 59 "-" "vscode-restclient"
+::ffff:127.0.0.1 - - [27/Jul/2024:15:00:25 +0000] "POST /api/signUp HTTP/1.1" 200 49 "-" "vscode-restclient"
+::ffff:127.0.0.1 - - [27/Jul/2024:15:00:26 +0000] "POST /api/signUp HTTP/1.1" 200 49 "-" "vscode-restclient"
+::ffff:127.0.0.1 - - [27/Jul/2024:15:00:26 +0000] "POST /api/signUp HTTP/1.1" 200 49 "-" "vscode-restclient"
+::ffff:127.0.0.1 - - [27/Jul/2024:15:00:26 +0000] "POST /api/signUp HTTP/1.1" 200 49 "-" "vscode-restclient"
+::ffff:127.0.0.1 - - [27/Jul/2024:15:00:27 +0000] "POST /api/signUp HTTP/1.1" 429 55 "-" "vscode-restclient"
+::ffff:127.0.0.1 - - [27/Jul/2024:15:00:27 +0000] "POST /api/signUp HTTP/1.1" 429 55 "-" "vscode-restclient"
+::ffff:127.0.0.1 - - [27/Jul/2024:15:01:10 +0000] "POST /api/signUp HTTP/1.1" 429 55 "-" "vscode-restclient"

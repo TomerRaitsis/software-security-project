@@ -1,6 +1,6 @@
 // simulating supervisor board
 const supervisorBoard = (req, res) => {
-  res.send("Any content sent from server");
+  res.send("welcome to the Supervisor Board");
 };
 import { UserModel } from "../models/dbShema.js";
 

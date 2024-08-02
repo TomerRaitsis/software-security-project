@@ -1,9 +1,9 @@
-import { UserModel } from "../models/dbShema.js";
+import { UserModel } from "../models/dbSchema.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../config/jwtConfig.js";
 
-// signUp controller
+// Sign-up controller: registers a new user
 const signUp = async (req, res) => {
   try {
     console.log(req.body);
@@ -28,7 +28,7 @@ const signUp = async (req, res) => {
   }
 };
 
-// signIn controller
+// Sign-in controller: authenticates a user
 const signIn = async (req, res) => {
   try {
     console.log(req.body);
@@ -46,8 +46,9 @@ const signIn = async (req, res) => {
           message: "invalid password",
         });
       } else {
+        // Generate a JWT token for the authenticated user
         let token = jwt.sign({ id: user._id }, jwtConfig, {
-          expiresIn: 86400, // 24hours
+          expiresIn: 86400, // Token expires in 24 hours
         });
         res.json({
           status: true,
@@ -66,4 +67,4 @@ const signIn = async (req, res) => {
   }
 };
 
-export {signUp,signIn};
+export { signUp, signIn };

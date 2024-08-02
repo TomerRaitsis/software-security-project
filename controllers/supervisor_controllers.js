@@ -1,4 +1,4 @@
-// simulating supervisor board
+// Simulate supervisor board
 const supervisorBoard = (req, res) => {
   res.send("welcome to the Supervisor Board");
 };

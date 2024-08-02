@@ -50,28 +50,30 @@ mongoose.connect(
   }
 );
 
+// Rate limiter middleware to limit requests from each IP
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
   message: 'Too many requests from this IP, please try again later.'
 });
 
+// Create a write stream for logging requests
 const accessLogStream = fs.createWriteStream(path.join(path.resolve(), 'access.log'), { flags: 'a' });
-
 app.use(morgan('combined', { stream: accessLogStream }));
 app.use('/api/', apiLimiter);
 
 
-// app routes
+// Initialize application routes
 routes(app);
 
 
-
+// Default route
 app.get("/", (req, res) => {
   res.status(200).json({ status: "testing" });
 });
 
-app.listen(3001, () => {
+
+const server = app.listen(3001, () => {
   console.log("listen on port 3001");
 });
 
@@ -95,4 +97,4 @@ app.listen(3001, () => {
 //   console.log('HTTP to HTTPS redirect server running on http://localhost:80');
 // });
 
-export default app;
+export {server, app};

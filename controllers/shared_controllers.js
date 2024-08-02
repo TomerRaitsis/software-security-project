@@ -1,8 +1,8 @@
-import { UserModel } from "../models/dbShema.js";
+import { UserModel } from "../models/dbSchema.js";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../config/jwtConfig.js";
 
-// simulating home page
+// Simulate home page
 const homeBoard = (req, res) => {
   res.send("Welcome to the home page");
 };

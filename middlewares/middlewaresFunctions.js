@@ -1,8 +1,8 @@
-import { UserModel } from "../models/dbShema.js";
+import { UserModel } from "../models/dbSchema.js";
 import jwt from "jsonwebtoken";
 import jwtConfig from "../config/jwtConfig.js";
 
-// validate password middleware
+// Middleware to validate password
 const validatePassword = (req, res, next) => {
   let re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
   if (!re.test(req.body.password)) {
@@ -16,7 +16,7 @@ const validatePassword = (req, res, next) => {
   next();
 };
 
-// check if the email is already taken
+// Middleware to check if email is already used
 const checkIfEmailIsAlreadyUsed = async (req, res, next) => {
   if (!req.body.email) {
     res.json({ status: false, message: "email is not provided" });
@@ -29,7 +29,7 @@ const checkIfEmailIsAlreadyUsed = async (req, res, next) => {
   next();
 };
 
-// verify client token
+// Middleware to verify JWT token
 const verifyJwtToken = async (req, res, next) => {
   let token = req.headers["x-access-token"];
   if (!token) {
@@ -51,7 +51,7 @@ const verifyJwtToken = async (req, res, next) => {
   next();
 };
 
-// verify if the user has the role supervisor
+// Middleware to verify if the user has the role supervisor
 const checkIfSupervisor = async (req, res, next) => {
   // console.log(req.userID);
   let user = await UserModel.findOne({ _id: req.userID });
@@ -62,7 +62,7 @@ const checkIfSupervisor = async (req, res, next) => {
   next();
 };
 
-// verify if the user has the role admin
+// Middleware to verify if the user has the role admin
 const checkIfAdmin = async (req, res, next) => {
   let user = await UserModel.findOne({ _id: req.userID });
   if (!user.roles.includes("ROLE_ADMIN")) {
@@ -72,4 +72,4 @@ const checkIfAdmin = async (req, res, next) => {
   next();
 };
 
-export {validatePassword,checkIfEmailIsAlreadyUsed,verifyJwtToken,checkIfSupervisor,checkIfAdmin};
+export { validatePassword, checkIfEmailIsAlreadyUsed, verifyJwtToken, checkIfSupervisor, checkIfAdmin };

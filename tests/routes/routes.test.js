@@ -1,15 +1,13 @@
 import request from 'supertest';
 import { expect } from 'chai';
-import express from 'express';
-import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
+import { app, server } from '../../server.js';
+
 dotenv.config();
 
-import app from '../../server.js';
-
-
+// Setup before tests run
 before(async function() {
   this.timeout(10000); // Increase timeout if needed
 
@@ -57,6 +55,12 @@ before(async function() {
     console.error("Error in test setup:", error);
     throw error; // This will cause the tests to fail if setup fails
   }
+});
+
+// Close the database connection and server after all tests
+after(async function() {
+  await mongoose.connection.close();
+  server.close();
 });
 
 describe('API Routes', () => {

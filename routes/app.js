@@ -12,6 +12,7 @@ checkIfSupervisor,
 checkIfAdmin,
 } from "../middlewares/middlewaresFunctions.js";
 
+// Define routes and apply middleware
 const routes = (app) => {
   app.post(
     "/api/signUp",
@@ -19,30 +20,37 @@ const routes = (app) => {
     signUp
   );
 
+  // Sign-in route
   app.post("/api/signIn", signIn);
 
+  // Home page route
   app.get("/api/homeBoard", homeBoard);
 
+  // User board route, requires JWT token verification
   app.get("/api/userBoard", verifyJwtToken, userBoard);
 
+  // Supervisor board route, requires JWT token and supervisor role verification
   app.get(
     "/api/supervisorBoard",
     [verifyJwtToken, checkIfSupervisor],
     supervisorBoard
   );
 
+  // Admin board route, requires JWT token and admin role verification
   app.get(
     "/api/adminBoard",
     [verifyJwtToken, checkIfAdmin],
     adminBoard
   );
 
+  // Add supervisor role route, requires JWT token and admin role verification
   app.put(
     "/api/addSupervisor",
     [verifyJwtToken, checkIfAdmin],
     addSupervisor
   );
 
+  // Remove supervisor role route, requires JWT token and admin role verification
   app.put(
     "/api/removeSupervisor",
     [verifyJwtToken, checkIfAdmin],

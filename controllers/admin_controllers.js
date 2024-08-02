@@ -5,38 +5,6 @@ const adminBoard = (req, res) => {
   res.send("welcome to the Admin Board");
 };
 
-// getAllRoles
-const getAllRoles = async (req, res) => {
-  try {
-    let allRoles = await UserModel.find({
-      roles: { $nin: ["ROLE_ADMIN"] },
-    }).select(["email", "roles"]);
-    // alterAllRoles is for filtering purposes
-    let alterAllRoles = allRoles.map((user) =>
-      user.roles.includes("ROLE_SUPERVISOR")
-        ? { ...user._doc, roles: ["ROLE_SUPERVISOR"] }
-        : { ...user._doc, roles: ["ROLE_USER"] }
-    );
-    console.log(alterAllRoles);
-    res.json(alterAllRoles);
-  } catch (err) {
-    console.log(err.message);
-    res.json({ error: err.message });
-  }
-};
-
-// getAllSupervisors
-const getAllSupervisors = async (req, res) => {
-  try {
-    let users = await UserModel.find({
-      roles: { $nin: ["ROLE_ADMIN"], $in: ["ROLE_SUPERVISOR"] },
-    });
-    res.json(users);
-  } catch (err) {
-    console.log(err.message);
-    res.json({ error: err.message });
-  }
-};
 
 // add new supervisor role
 const addSupervisor = async (req, res) => {
@@ -79,4 +47,4 @@ const removeSupervisor = async (req, res) => {
   }
 };
 
-export {adminBoard, removeSupervisor, addSupervisor, getAllSupervisors, getAllRoles};
+export {adminBoard, removeSupervisor, addSupervisor};

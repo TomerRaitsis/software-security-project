@@ -1,8 +1,8 @@
 import { signIn, signUp } from "../controllers/authentication_controllers.js";
-import { adminBoard, removeSupervisor, addSupervisor, getAllSupervisors, getAllRoles } from "../controllers/admin_controllers.js";
-import {supervisorBoard, getAllUsers} from "../controllers/supervisor_controllers.js";
+import { adminBoard, removeSupervisor, addSupervisor} from "../controllers/admin_controllers.js";
+import {supervisorBoard} from "../controllers/supervisor_controllers.js";
 import userBoard from "../controllers/user_controllers.js";
-import { updateProfile, homeBoard } from "../controllers/shared_controllers.js";
+import { homeBoard } from "../controllers/shared_controllers.js";
 import {
 
 validatePassword,
@@ -35,30 +35,6 @@ const routes = (app) => {
     "/api/adminBoard",
     [verifyJwtToken, checkIfAdmin],
     adminBoard
-  );
-
-  app.put(
-    "/api/updateProfile",
-    [verifyJwtToken, checkIfEmailIsAlreadyUsed],
-    updateProfile
-  );
-
-  app.get(
-    "/api/getAllUsers",
-    [verifyJwtToken, checkIfSupervisor],
-    getAllUsers
-  );
-
-  app.get(
-    "/api/getAllRoles",
-    [verifyJwtToken, checkIfAdmin],
-    getAllRoles
-  );
-
-  app.get(
-    "/api/getAllSupervisors",
-    [verifyJwtToken, checkIfAdmin],
-    getAllSupervisors
   );
 
   app.put(

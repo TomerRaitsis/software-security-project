@@ -26,29 +26,31 @@ app.use((req, res, next) => {
   next()
 });
 
-// allow one origin to serve and block the rest
-const corsOption = {
-  origin : "http://localhost:3000"
-}
+const corsOptions = {
+  origin: [
+    "http://localhost:8080",  // For HTTP access
+    "https://localhost:8443", // For HTTPS access
+  ],
+  credentials: true, // If you need to send cookies or authentication headers
+};
 
-// cors middleware
-app.use(cors(corsOption))
+app.use(cors(corsOptions));
 
 mongoose.connect(
   process.env.MONGO_URI,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false,
   },
-  (err, res) => {
+  (err) => {
     if (err) {
-      console.log("Error connecting to database. " + err);
+      console.log("Error connecting to database: ", err);
     } else {
       console.log("Connected to Database");
     }
   }
 );
+
 
 // Rate limiter middleware to limit requests from each IP
 const apiLimiter = rateLimit({
@@ -69,32 +71,36 @@ routes(app);
 
 // Default route
 app.get("/", (req, res) => {
-  res.status(200).json({ status: "testing" });
-});
+  res.status(200).send(`
+    <h1 style="text-align: center; margin-top: 20px;">
+      Welcome to our secure HTTPS role-based authentication API
+    </h1>
+  `);});
 
 
 const server = app.listen(3001, () => {
   console.log("listen on port 3001");
 });
 
-// // Load SSL certificate and key
-// const dirname = path.resolve();
-// const options = {
-//   key: fs.readFileSync(path.resolve(dirname, 'selfsigned.key')),
-//   cert: fs.readFileSync(path.resolve(dirname, 'selfsigned.crt'))
-// };
+// Load SSL certificate and key
+const dirname = path.resolve();
+const options = {
+  key: fs.readFileSync(path.join(dirname, 'certs', 'server.key')),
+  cert: fs.readFileSync(path.join(dirname, 'certs', 'server.cert')),
+};
 
-// // Start HTTPS server
-// https.createServer(options, app).listen(443, () => {
-//   console.log('Server is running on https://localhost:443');
-// });
 
-// // Redirect HTTP to HTTPS
-// http.createServer((req, res) => {
-//   res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-//   res.end();
-// }).listen(80, () => {
-//   console.log('HTTP to HTTPS redirect server running on http://localhost:80');
-// });
+// Start HTTPS server
+https.createServer(options, app).listen(8443, () => {
+  console.log('Server is running on https://localhost:8443');
+});
 
-export {server, app};
+// Redirect HTTP to HTTPS
+http.createServer((req, res) => {
+  res.writeHead(301, { "Location": "https://" + req.headers['host'].replace(/:\d+/, ':8443') + req.url });
+  res.end();
+}).listen(8080, () => {
+  console.log('HTTP to HTTPS redirect server running on http://localhost:8080');
+});
+
+export {server,app};

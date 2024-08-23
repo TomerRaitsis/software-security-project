@@ -3,9 +3,12 @@ import { expect } from 'chai';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
-import { app, server } from '../../server.js';
+import { server } from '../../server.js';
 
 dotenv.config();
+
+// Disable SSL verification for self-signed certificates in tests
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 // Setup before tests run
 before(async function() {
@@ -24,17 +27,17 @@ before(async function() {
     console.log("Database cleared");
 
     // Sign up users
-    await request(app)
+    await request('https://localhost:8443')
       .post('/api/signUp')
       .send({ email: 'user@example.com', password: 'Password123' })
       .expect(200);
 
-    await request(app)
+    await request('https://localhost:8443')
       .post('/api/signUp')
       .send({ email: 'supervisor@example.com', password: 'Password123' })
       .expect(200);
 
-    await request(app)
+    await request('https://localhost:8443')
       .post('/api/signUp')
       .send({ email: 'admin@example.com', password: 'Password123' })
       .expect(200);
@@ -67,7 +70,7 @@ describe('API Routes', () => {
 
   describe('POST /api/signUp', () => {
     it('should sign up a user', (done) => {
-      request(app)
+      request('https://localhost:8443')
         .post('/api/signUp')
         .send({ email: 'test@example.com', password: 'Password123' })
         .expect(200)
@@ -79,7 +82,7 @@ describe('API Routes', () => {
     });
 
     it('should not sign up a user with an existing email', (done) => {
-      request(app)
+      request('https://localhost:8443')
         .post('/api/signUp')
         .send({ email: 'test@example.com', password: 'Password123' })
         .expect(200)
@@ -93,7 +96,7 @@ describe('API Routes', () => {
 
   describe('POST /api/signIn', () => {
   it('should sign in a user', (done) => {
-    request(app)
+    request('https://localhost:8443')
       .post('/api/signIn')
       .send({ email: 'test@example.com', password: 'Password123' })
       .set('x-access-token', 'eyJhbGciOiJIUzI1NiIsInR')
@@ -107,7 +110,7 @@ describe('API Routes', () => {
 
   describe('GET /api/homeBoard', () => {
     it('should return home board content', (done) => {
-      request(app)
+      request('https://localhost:8443')
         .get('/api/homeBoard')
         .expect(200)
         .end((err, res) => {
@@ -121,20 +124,20 @@ describe('API Routes', () => {
   describe('GET /api/userBoard', () => {
     it('should return user board content for authenticated user', (done) => {
       // sign up and sign in a user to get a valid token
-        request(app)
+        request('https://localhost:8443')
             .post('/api/signUp')
             .send({ email: 'test@gmail.com', password: 'Password123' })
             .expect(200)
             .end((err, res) => {
                 if (err) return done(err);
-                request(app)
+                request('https://localhost:8443')
                     .post('/api/signIn')
                     .send({ email: 'test@gmail.com', password: 'Password123' })
                     .expect(200)
                     .end((err, res) => {
                         if (err) return done(err);
                         const token = res.body.message.accessToken;
-                        request(app)
+                        request('https://localhost:8443')
                             .get('/api/userBoard')
                             .set('x-access-token', token)
                             .expect(200)
@@ -151,14 +154,14 @@ describe('API Routes', () => {
 
   describe('GET /api/supervisorBoard', () => {
     it('should return supervisor board content for authenticated supervisor', (done) => {
-      request(app)
+      request('https://localhost:8443')
           .post('/api/signIn')
           .send({ email: 'supervisor@example.com', password: 'Password123' })
           .expect(200)
           .end((err, res) => {
               if (err) return done(err);
               const token = res.body.message.accessToken;
-              request(app)
+              request('https://localhost:8443')
                   .get('/api/supervisorBoard')
                   .set('x-access-token', token)
                   .expect(200)
@@ -173,14 +176,14 @@ describe('API Routes', () => {
 
   describe('GET /api/adminBoard', () => {
     it('should return admin board content for authenticated admin', (done) => {
-      request(app)
+      request('https://localhost:8443')
           .post('/api/signIn')
           .send({ email: 'admin@example.com', password: 'Password123' })
           .expect(200)
           .end((err, res) => {
               if (err) return done(err);
               const token = res.body.message.accessToken;
-              request(app)
+              request('https://localhost:8443')
                   .get('/api/adminBoard')
                   .set('x-access-token', token)
                   .expect(200)
@@ -195,14 +198,14 @@ describe('API Routes', () => {
 
   describe('PUT /api/addSupervisor', () => {
     it('should add a supervisor for authenticated admin', (done) => {
-      request(app)
+      request('https://localhost:8443')
           .post('/api/signIn')
           .send({ email: 'admin@example.com', password: 'Password123' })
           .expect(200)
           .end((err, res) => {
               if (err) return done(err);
               const token = res.body.message.accessToken;
-              request(app)
+              request('https://localhost:8443')
                   .put('/api/addSupervisor')
                   .set('x-access-token', token)
                   .send({ email: 'user@example.com' })
@@ -217,14 +220,14 @@ describe('API Routes', () => {
 
   describe('PUT /api/removeSupervisor', () => {
     it('should remove a supervisor for authenticated admin', (done) => {
-      request(app)
+      request('https://localhost:8443')
           .post('/api/signIn')
           .send({ email: 'admin@example.com', password: 'Password123' })
           .expect(200)
           .end((err, res) => {
               if (err) return done(err);
               const token = res.body.message.accessToken;
-              request(app)
+              request('https://localhost:8443')
                   .put('/api/removeSupervisor')
                   .set('x-access-token', token)
                   .send({ email: 'user@example.com' })
@@ -233,8 +236,8 @@ describe('API Routes', () => {
                       if (err) return done(err);
                       done();
                   });
-          });
+          }
+      );
+    });
   });
-});
-
 });
